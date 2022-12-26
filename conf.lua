@@ -19,13 +19,13 @@ function love.conf(t)
     t.audio.mixwithsystem = true        
 -- Keep background music playing when opening LOVE (boolean, iOS and Android only)
 
-    t.window.title = "Untitled"         
+    t.window.title = "LOVE2D Android project manager"         
 -- The window title (string)
     t.window.icon = nil                 
 -- Filepath to an image to use as the window's icon (string)
-    t.window.width = 1080          
+    t.window.width = 384
 -- The window width (number)
-    t.window.height = 2400   
+    t.window.height = 814
 -- The window height (number)
     t.window.borderless = false         
 -- Remove all border visuals from the window (boolean)

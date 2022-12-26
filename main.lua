@@ -2,8 +2,8 @@ local loveZip = require("love-zip")
 local urfs = require "urfs"
 require("gooi")
 
-local xoffs
-local yoffs
+local xoffs = 0
+local yoffs = 0
 local w = 384
 local h = 813
 
@@ -12,7 +12,8 @@ curprojectpath = ""
 curprojectname = ""
 
 function love.load()
-	  w, h = love.window.getSafeArea()
+    love.window.setMode(w, h)
+	xoffs, yoffs, w, h = love.window.getSafeArea()
     loadSavedData()
     loadUI()
 end
@@ -20,17 +21,17 @@ end
 function loadUI()
     gooi.newLabel({
         text = "Choose a project to load",
-        x = w / 2,
-        y = 25,
-        w = 100,
+        x = w / 2 + xoffs,
+        y = 25 + yoffs,
+        w = w,
         h = 25,
         group = "main-menu"
     })
     for i, v in ipairs(projectlist) do
         gooi.newButton({
             text = locationToProjectName(v),
-            x = 10,
-            y = 25 + 60*i,
+            x = 10 + xoffs,
+            y = 25 + 60*i + yoffs,
             w = w - 20,
             h = 50,
             group = "main-menu"
@@ -47,8 +48,8 @@ function loadUI()
     end
     gooi.newButton({
         text = "Load new project",
-        x = 10,
-        y = h - 50,
+        x = 10 + xoffs,
+        y = h - 50 + yoffs,
         w = w - 20,
         h = 40,
         group = "main-menu"
@@ -58,16 +59,16 @@ function loadUI()
     end)
     newprojpathfield = gooi.newText({
         text = "",
-        x = 10,
-        y = h/2 - 40,
+        x = 10 + xoffs,
+        y = h/2 - 40 + yoffs,
         w = w-20,
         h = 40,
         group = "add-project",
     })
     gooi.newButton({
         text = "Cancel",
-        x = 10,
-        y = h/2,
+        x = 10 + xoffs,
+        y = h/2 + yoffs,
         w = w/2 - 10,
         h = 40,
         group = "add-project"
@@ -77,8 +78,8 @@ function loadUI()
     end)
     gooi.newButton({
         text = "Confirm",
-        x = w/2,
-        y = h/2,
+        x = w/2 + xoffs,
+        y = h/2 + yoffs,
         w = w/2 - 10,
         h = 40,
         group = "add-project"
@@ -95,16 +96,16 @@ function loadUI()
     --TODO: make this label work
     gooi.newLabel({
         text = curprojectname,
-        x = 10,
-        y = 10,
+        x = 10 + xoffs,
+        y = 10 + yoffs,
         w = w - 60,
         h = 50,
         group = "editor"
     })
     gooi.newButton({
         text = "Build and run",
-        x = 10,
-        y = h - 50,
+        x = 10 + xoffs,
+        y = h - 50 + yoffs,
         w = w - 20,
         h = 40,
         group = "editor"
@@ -113,8 +114,8 @@ function loadUI()
     end)
     gooi.newButton({
         text = "",
-        x = w - 50,
-        y = 10,
+        x = w - 50 + xoffs,
+        y = 10 + yoffs,
         w = 40,
         h = 40,
         icon = "assets/trashcan.png",
@@ -209,7 +210,7 @@ end
 
 function love.draw()
     --w, h = select(3, love.window.getSafeArea())
-	  love.graphics.print(w, 100, 100)
+	love.graphics.print(w, 100, 100)
     love.graphics.print(h, 100, 200)
     love.graphics.print(love.graphics.getWidth(), 200, 100)
     love.graphics.print(love.graphics.getHeight(), 200, 200)
