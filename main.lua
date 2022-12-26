@@ -21,7 +21,7 @@ end
 function loadUI()
     gooi.newLabel({
         text = "Choose a project to load",
-        x = w / 2 + xoffs,
+        x = 0 + xoffs,
         y = 25 + yoffs,
         w = w,
         h = 25,
