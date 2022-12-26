@@ -2,15 +2,17 @@ local loveZip = require("love-zip")
 local urfs = require "urfs"
 require("gooi")
 
-local w = love.graphics.getWidth()
-local h = love.graphics.getHeight()
+local xoffs
+local yoffs
+local w = 384
+local h = 813
 
 projectlist = {}
 curprojectpath = ""
 curprojectname = ""
 
 function love.load()
-    gooi.desktopMode()
+	  w, h = love.window.getSafeArea()
     loadSavedData()
     loadUI()
 end
@@ -55,7 +57,7 @@ function loadUI()
         gooi.setGroupVisible("add-project", true)
     end)
     newprojpathfield = gooi.newText({
-        text = "project path",
+        text = "",
         x = 10,
         y = h/2 - 40,
         w = w-20,
@@ -144,7 +146,7 @@ function loadSavedData()
     local datastring = love.filesystem.read("savedata.txt")
     if (datastring == "") then
         projectlist = {}
-        gooi.alert({text = "Welcome!\n \nPress the button at the bottom\nto load in your first project!"})
+        --gooi.alert({text = "Welcome!\n \nPress the button at the bottom\nto load in your first project!"})
     else
         local tbl = split(datastring, "\n")
         projectlist = tbl
@@ -191,16 +193,27 @@ function zipAndRunCurProject()
     love.system.openURL("file://"..love.filesystem.getSaveDirectory().."/builds/"..curprojectname..".love")
 end
 
+function love.mousepressed(x, y, button)     gooi.pressed() end
+function love.mousereleased(x, y, button)    gooi.released() end
+function love.textinput(text)                gooi.textinput(text) end
+function love.keypressed(k, code, isrepeat)  gooi.keypressed(k, code) end
+function love.keyreleased(k, code, isrepeat) gooi.keyreleased(k, code) end
+
+function love.update(dt)
+	gooi.update(dt)
+end
+
+function love.displayrotated(id, orientation)
+	w, h = select(3, love.window.getSafeArea())
+end
+
 function love.draw()
+    --w, h = select(3, love.window.getSafeArea())
+	  love.graphics.print(w, 100, 100)
+    love.graphics.print(h, 100, 200)
+    love.graphics.print(love.graphics.getWidth(), 200, 100)
+    love.graphics.print(love.graphics.getHeight(), 200, 200)
     gooi.draw("main-menu")
     gooi.draw("add-project")
     gooi.draw("editor")
-end
-
-function love.mousepressed(x, y, button)
-    gooi.pressed()
-end
-
-function love.mousereleased(x, y, button)
-    gooi.released()
 end
