@@ -1,139 +1,21 @@
 local loveZip = require("love-zip")
-local urfs = require "urfs"
+local urfs = require("urfs")
+require("gui")
 require("gooi")
 
-local xoffs = 0
-local yoffs = 0
-local w = 384
-local h = 813
+xoffs = 0
+yoffs = 0
+w = 384
+h = 814
 
 projectlist = {}
 curprojectpath = ""
 curprojectname = ""
 
 function love.load()
-    love.window.setMode(w, h)
 	xoffs, yoffs, w, h = love.window.getSafeArea()
     loadSavedData()
-    loadUI()
-end
-
-function loadUI()
-    gooi.newLabel({
-        text = "Choose a project to load",
-        x = 0 + xoffs,
-        y = 25 + yoffs,
-        w = w,
-        h = 25,
-        group = "main-menu"
-    })
-    for i, v in ipairs(projectlist) do
-        gooi.newButton({
-            text = locationToProjectName(v),
-            x = 10 + xoffs,
-            y = 25 + 60*i + yoffs,
-            w = w - 20,
-            h = 50,
-            group = "main-menu"
-        })
-        :bg({0.05, 0.05, 0.05})
-        :onRelease(function()
-            curprojectname = locationToProjectName(v)
-            curprojectpath = v
-            table.insert(projectlist, 1, table.remove(projectlist, i))
-            saveData()
-            gooi.setGroupVisible("main-menu", false)
-            gooi.setGroupVisible("editor", true)
-        end)
-    end
-    gooi.newButton({
-        text = "Load new project",
-        x = 10 + xoffs,
-        y = h - 50 + yoffs,
-        w = w - 20,
-        h = 40,
-        group = "main-menu"
-    }):onRelease(function()
-        gooi.setGroupVisible("main-menu", false)
-        gooi.setGroupVisible("add-project", true)
-    end)
-    newprojpathfield = gooi.newText({
-        text = "",
-        x = 10 + xoffs,
-        y = h/2 - 40 + yoffs,
-        w = w-20,
-        h = 40,
-        group = "add-project",
-    })
-    gooi.newButton({
-        text = "Cancel",
-        x = 10 + xoffs,
-        y = h/2 + yoffs,
-        w = w/2 - 10,
-        h = 40,
-        group = "add-project"
-    }):onRelease(function()
-        gooi.setGroupVisible("add-project", false)
-        gooi.setGroupVisible("main-menu", true)
-    end)
-    gooi.newButton({
-        text = "Confirm",
-        x = w/2 + xoffs,
-        y = h/2 + yoffs,
-        w = w/2 - 10,
-        h = 40,
-        group = "add-project"
-    }):onRelease(function()
-        local newprojectpath = newprojpathfield.getText()
-        table.insert(projectlist, 1, newprojectpath)
-        --TODO: check if this is a correct path: if not, don't add it
-        saveData()
-        curprojectname = locationToProjectName(newprojectpath)
-        curprojectpath = newprojectpath
-        gooi.setGroupVisible("add-project", false)
-        gooi.setGroupVisible("editor", true)
-    end)
-    --TODO: make this label work
-    gooi.newLabel({
-        text = curprojectname,
-        x = 10 + xoffs,
-        y = 10 + yoffs,
-        w = w - 60,
-        h = 50,
-        group = "editor"
-    })
-    gooi.newButton({
-        text = "Build and run",
-        x = 10 + xoffs,
-        y = h - 50 + yoffs,
-        w = w - 20,
-        h = 40,
-        group = "editor"
-    }):onRelease(function()
-        zipAndRunCurProject(curprojectpath)
-    end)
-    gooi.newButton({
-        text = "",
-        x = w - 50 + xoffs,
-        y = 10 + yoffs,
-        w = 40,
-        h = 40,
-        icon = "assets/trashcan.png",
-        group = "editor"
-    }):bg({1, 0.05, 0.05})
-    :onRelease(function()
-        gooi.confirm({
-            text = "Are you sure you want to\nremove " .. curprojectname .. "\nfrom the project list?\n \n(note: this will not remove\nit from your hard drive)",
-            ok = function()
-                table.remove(projectlist, 1)
-                saveData()
-                gooi.setGroupVisible("editor", false)
-                gooi.setGroupVisible("main-menu", true)
-            end
-        })
-    end)
-    gooi.setGroupVisible("add-project", false)
-    gooi.setGroupVisible("editor", false)
+    loadGUI()
 end
 
 function loadSavedData()
@@ -176,6 +58,25 @@ function saveData()
     love.filesystem.write("savedata.txt", datastring)
 end
 
+function addNewProject()
+    local newprojectpath = newprojpathfield:getText()
+    if newprojectpath:match("/$") then parent = newprojectpath:sub(1, -2) end
+    if pathIsLegal(newprojectpath, locationToProjectName(newprojectpath)) then
+        --update UI project list
+        table.insert(projectlist, 1, newprojectpath)
+        openProject(1, newprojectpath)
+        gooi.setGroupVisible("add-project", false)
+        gooi.setGroupVisible("editor", true)
+    end
+end
+
+function openProject(index, path)
+    curprojectname = locationToProjectName(path)
+    curprojectpath = path
+    table.insert(projectlist, 1, table.remove(projectlist, index))
+    saveData()
+end
+
 function zipAndRunCurProject()
     local info = love.filesystem.getInfo("builds", "directory")
     if (info == nil) then
@@ -183,15 +84,39 @@ function zipAndRunCurProject()
     end
     
     local parent = curprojectpath:sub(1, -string.len(curprojectname) - 2)
-    if parent:match("/$") then parent = parent:sub(1, -2) end
     print(parent)
     print(urfs.mount(parent))
     print(loveZip.writeZip(curprojectname, "builds/"..curprojectname..".love"))
     print(urfs.unmount(parent))
     
-
     gooi.alert({text = "Project built at:\n".. love.filesystem.getSaveDirectory() .. "\n/builds/" .. curprojectname .. ".love"})
     love.system.openURL("file://"..love.filesystem.getSaveDirectory().."/builds/"..curprojectname..".love")
+end
+
+function pathIsLegal(path, name)
+    print("path = "..path)
+    print("name = "..name)
+    local parent = path:sub(1, -string.len(name) - 2)
+    print("parent = "..parent)
+    if (urfs.mount(parent) == false) then
+        gooi.alert({text = "Illegal path:\nCould not find parent directory."})
+        urfs.unmount(parent)
+        return false
+    end
+    local info = love.filesystem.getInfo(name, "directory")
+    if (info == nil) then
+        gooi.alert({text = "Illegal path:\nCould not find project directory"})
+        urfs.unmount(parent)
+        return false
+    end
+    info = love.filesystem.getInfo(name.."/main.lua", "file")
+    if (info == nil) then
+        gooi.alert({text = "illegal path:\nCould not find main.lua in root"})
+        urfs.unmount(parent)
+        return false
+    end
+    urfs.unmount(parent)
+    return true
 end
 
 function love.mousepressed(x, y, button)     gooi.pressed() end
@@ -204,16 +129,16 @@ function love.update(dt)
 	gooi.update(dt)
 end
 
-function love.displayrotated(id, orientation)
-	w, h = select(3, love.window.getSafeArea())
+function love.resize()
+	xoffs, yoffs, w, h = love.window.getSafeArea()
 end
 
 function love.draw()
     --w, h = select(3, love.window.getSafeArea())
-	love.graphics.print(w, 100, 100)
-    love.graphics.print(h, 100, 200)
-    love.graphics.print(love.graphics.getWidth(), 200, 100)
-    love.graphics.print(love.graphics.getHeight(), 200, 200)
+	--love.graphics.print(xoffs, 100, 100)
+    --love.graphics.print(yoffs, 100, 200)
+    --love.graphics.print(w, 200, 100)
+    --love.graphics.print(h, 200, 200)
     gooi.draw("main-menu")
     gooi.draw("add-project")
     gooi.draw("editor")

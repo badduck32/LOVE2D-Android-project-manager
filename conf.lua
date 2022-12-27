@@ -7,7 +7,7 @@ function love.conf(t)
     -- Search files in source directory before save directory (boolean)
     t.version = "11.1"                  
     -- The LÖVE version this game was made for (string)
-    t.console = false                   
+    t.console = true                   
     -- Attach a console (boolean, Windows only)
     t.accelerometerjoystick = true      
 -- Enable the accelerometer on iOS and Android by exposing it as a Joystick (boolean)
