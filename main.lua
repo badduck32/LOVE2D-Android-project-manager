@@ -58,12 +58,11 @@ function saveData()
 	love.filesystem.write("savedata.txt", datastring)
 end
 
-function addNewProject()
-	local newprojectpath = newprojpathfield:getText()
-	if newprojectpath:match("/$") then parent = newprojectpath:sub(1, -2) end
-	if pathIsLegal(newprojectpath, locationToProjectName(newprojectpath)) then
-		table.insert(projectlist, 1, newprojectpath)
-		openProject(1, newprojectpath)
+function addNewProject(path)
+	if path:match("/$") then path = path:sub(1, -2) end
+	if pathIsLegal(path, locationToProjectName(path)) then
+		table.insert(path, 1, path)
+		openProject(1, path)
 		loadEditor()
 	end
 end

@@ -61,7 +61,7 @@ function loadAddProject()
 	clearComponents()
 	curgroup = "add-project"
 	components = {
-		newprojpathfield = gooi.newText({
+		gooi.newText({
 			text = "",
 			x = 10 + xoffs,
 			y = h/2 - 40 + yoffs,
@@ -89,7 +89,7 @@ function loadAddProject()
 			group = "add-project"
 		})
 		:onRelease(function()
-			addNewProject()
+			addNewProject(components[1]:getText())
 		end)
 	}
 end
@@ -98,7 +98,7 @@ function loadEditor()
 	clearComponents()
 	curgroup = "editor"
 	components = {
-		titleLabel = gooi.newLabel({
+		gooi.newLabel({
 			text = curprojectname,
 			x = 10 + xoffs,
 			y = 10 + yoffs,
