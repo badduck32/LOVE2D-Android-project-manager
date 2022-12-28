@@ -22,12 +22,12 @@ function loadSavedData()
 	--creates a savedata.txt file in case it doesn't exist yet
 	love.filesystem.setIdentity("love2d-android-project-manager")
 	info = love.filesystem.getInfo("savedata.txt", "file")
-	if (info == nil) then
+	if info == nil then
 		love.filesystem.write("savedata.txt", "")
 	end
 
 	local datastring = love.filesystem.read("savedata.txt")
-	if (datastring == "") then
+	if datastring == "" then
 		projectlist = {}
 		--gooi.alert({text = "Welcome!\n \nPress the button at the bottom\nto load in your first project!"})
 	else
@@ -76,18 +76,20 @@ end
 
 function zipAndRunCurProject()
 	local info = love.filesystem.getInfo("builds", "directory")
-	if (info == nil) then
+	if info == nil then
 		love.filesystem.createDirectory("builds")
 	end
 	
 	local parent = curprojectpath:sub(1, -string.len(curprojectname) - 2)
-	print(parent)
-	print(urfs.mount(parent))
-	print(loveZip.writeZip(curprojectname, "builds/"..curprojectname..".love"))
-	print(urfs.unmount(parent))
-	
+	urfs.mount(parent)
+	loveZip.writeZip(curprojectname, "builds/"..curprojectname..".love")
+	urfs.unmount(parent)
+
+	info = love.filesystem.getInfo("builds/"..curprojectname..".love")
+	if info == nil then gooi.alert({text = "Tried to build, but\ncouldn't find built file."}) end
+
 	gooi.alert({text = "Project built at:\n".. love.filesystem.getSaveDirectory() .. "\n/builds/" .. curprojectname .. ".love"})
-	love.system.openURL("file://"..love.filesystem.getSaveDirectory().."/builds/"..curprojectname..".love")
+	love.system.openURL(love.filesystem.getSaveDirectory().."/builds/"..curprojectname..".love")
 end
 
 function pathIsLegal(path, name)
@@ -95,19 +97,19 @@ function pathIsLegal(path, name)
 	print("name = "..name)
 	local parent = path:sub(1, -string.len(name) - 2)
 	print("parent = "..parent)
-	if (urfs.mount(parent) == false) then
+	if urfs.mount(parent) == false then
 		gooi.alert({text = "Illegal path:\nCould not find parent directory."})
 		urfs.unmount(parent)
 		return false
 	end
 	local info = love.filesystem.getInfo(name, "directory")
-	if (info == nil) then
+	if info == nil then
 		gooi.alert({text = "Illegal path:\nCould not find project directory"})
 		urfs.unmount(parent)
 		return false
 	end
 	info = love.filesystem.getInfo(name.."/main.lua", "file")
-	if (info == nil) then
+	if info == nil then
 		gooi.alert({text = "illegal path:\nCould not find main.lua in root"})
 		urfs.unmount(parent)
 		return false
