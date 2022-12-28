@@ -52,7 +52,6 @@ function loadMainMenu()
 		:bg({0.05, 0.05, 0.05})
 		:onRelease(function()
 			openProject(i, v)
-			loadEditor()
 		end))
 	end
 end

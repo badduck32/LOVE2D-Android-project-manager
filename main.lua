@@ -61,9 +61,8 @@ end
 function addNewProject(path)
 	if path:match("/$") then path = path:sub(1, -2) end
 	if pathIsLegal(path, locationToProjectName(path)) then
-		table.insert(path, 1, path)
+		table.insert(projectlist, 1, path)
 		openProject(1, path)
-		loadEditor()
 	end
 end
 
@@ -72,6 +71,7 @@ function openProject(index, path)
 	curprojectpath = path
 	table.insert(projectlist, 1, table.remove(projectlist, index))
 	saveData()
+	loadEditor()
 end
 
 function zipAndRunCurProject()
