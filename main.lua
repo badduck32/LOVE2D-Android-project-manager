@@ -5,15 +5,15 @@ require("gooi")
 
 xoffs = 0
 yoffs = 0
-w = 384
-h = 814
+w = 0
+h = 0
 
 projectlist = {}
 curprojectpath = ""
 curprojectname = ""
 
 function love.load()
-	xoffs, yoffs, w, h = love.window.getSafeArea()
+	  xoffs, yoffs, w, h = love.window.getSafeArea()
     loadSavedData()
     loadGUI()
 end
@@ -135,10 +135,8 @@ end
 
 function love.draw()
     --w, h = select(3, love.window.getSafeArea())
-	--love.graphics.print(xoffs, 100, 100)
-    --love.graphics.print(yoffs, 100, 200)
-    --love.graphics.print(w, 200, 100)
-    --love.graphics.print(h, 200, 200)
+	  --xoffs, yoffs, w, h = love.window.getSafeArea()
+	  love.graphics.print("xoffs: "..xoffs.."\nyoffs: "..yoffs.."\nw: "..w.."\nh: "..h, 100, 100)
     gooi.draw("main-menu")
     gooi.draw("add-project")
     gooi.draw("editor")

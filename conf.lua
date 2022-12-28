@@ -23,9 +23,9 @@ function love.conf(t)
 -- The window title (string)
     t.window.icon = nil                 
 -- Filepath to an image to use as the window's icon (string)
-    t.window.width = 384
+    t.window.width = 1080
 -- The window width (number)
-    t.window.height = 814
+    t.window.height = 2400
 -- The window height (number)
     t.window.borderless = false         
 -- Remove all border visuals from the window (boolean)

@@ -1,43 +1,11 @@
 newprojpathfield = nil
 titleLabel = nil
+projectlistbuttons = {}
+components = {}
 
 function loadGUI()
-    gooi.newLabel({
-        text = "Choose a project to load",
-        x = 0 + xoffs,
-        y = 25 + yoffs,
-        w = w,
-        h = 25,
-        group = "main-menu"
-    }):center()
-    for i, v in ipairs(projectlist) do
-        gooi.newButton({
-            text = locationToProjectName(v),
-            x = 10 + xoffs,
-            y = 25 + 60*i + yoffs,
-            w = w - 20,
-            h = 50,
-            group = "main-menu"
-        })
-        :bg({0.05, 0.05, 0.05})
-        :onRelease(function()
-            openProject(i, v)
-            gooi.setGroupVisible("main-menu", false)
-            gooi.setGroupVisible("editor", true)
-        end)
-    end
-    gooi.newButton({
-        text = "Add new project",
-        x = 10 + xoffs,
-        y = h - 50 + yoffs,
-        w = w - 20,
-        h = 40,
-        group = "main-menu"
-    }):onRelease(function()
-        newprojpathfield:setText("")
-        gooi.setGroupVisible("main-menu", false)
-        gooi.setGroupVisible("add-project", true)
-    end)
+		--xoffs, yoffs, w, h = love.window.getSafeArea()
+    
     newprojpathfield = gooi.newText({
         text = "",
         x = 10 + xoffs,
@@ -50,7 +18,7 @@ function loadGUI()
         text = "Cancel",
         x = 10 + xoffs,
         y = h/2 + yoffs,
-        w = w/2 - 10,
+        w = w/3 - 10,
         h = 40,
         group = "add-project"
     }):onRelease(function()
@@ -59,7 +27,7 @@ function loadGUI()
     end)
     gooi.newButton({
         text = "Confirm",
-        x = w/2 + xoffs,
+        x = w/3 + xoffs,
         y = h/2 + yoffs,
         w = w/2 - 10,
         h = 40,
@@ -110,3 +78,77 @@ function loadGUI()
     gooi.setGroupVisible("add-project", false)
     gooi.setGroupVisible("editor", false)
 end
+
+function updateGUI()
+	for i, v in ipairs(projectlist) do
+        projectlistbutton[i] = gooi.newButton({
+            text = locationToProjectName(v),
+            x = 10 + xoffs,
+            y = 25 + 60*i + yoffs,
+            w = w - 20,
+            h = 50,
+            group = "main-menu"
+        })
+        :bg({0.05, 0.05, 0.05})
+        :onRelease(function()
+            openProject(i, v)
+            gooi.setGroupVisible("main-menu", false)
+            gooi.setGroupVisible("editor", true)
+        end)
+	end
+	titleLabel.setText(curprojectname)
+end
+
+function loadMainMenu()
+	--table with all components, first call
+	--removecomponent on all, then create new
+	--components and store in table
+	{
+		gooi.newLabel({
+			text = "Choose a project to load",
+			x = 0 + xoffs,
+			y = 25 + yoffs,
+			w = w,
+			h = 25,
+			group = "main-menu"
+		}):center()
+		for i, v in ipairs(projectlist) do
+			projectlistbutton[i] = gooi.newButton({
+				text = locationToProjectName(v),
+				x = 10 + xoffs,
+				y = 25 + 60*i + yoffs,
+				w = w - 20,
+				h = 50,
+				group = "main-menu"
+        })
+			:bg({0.05, 0.05, 0.05})
+			:onRelease(function()
+				openProject(i, v)
+				gooi.setGroupVisible("main-menu", false)
+				gooi.setGroupVisible("editor", true)
+			end)
+    end
+		gooi.newButton({
+			text = "Add new project",
+			x = 10 + xoffs,
+			y = h - 50 + yoffs,
+			w = w - 20,
+			h = 40,
+			group = "main-menu"
+		})
+		:onRelease(function()
+			newprojpathfield:setText("")
+			gooi.setGroupVisible("main-menu", false)
+			gooi.setGroupVisible("add-project", true)
+		end)
+	}
+end
+
+function loadAddProject()
+
+end
+
+function loadEditor()
+
+end
+	
