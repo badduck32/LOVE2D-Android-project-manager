@@ -1,2 +1,2 @@
-# LOVE2D Android project manager
- A small project manager for LÖVE2D for Android
+# Love2d Android Manager of Projects
+A small project manager to quickly build and test your LÖVE2D projects on Android.

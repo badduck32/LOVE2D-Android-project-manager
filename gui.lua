@@ -114,7 +114,7 @@ function loadEditor()
 			group = "editor"
 		})
 		:onRelease(function()
-			zipAndRunCurProject(curprojectpath)
+			runCurProject(curprojectpath)
 		end),
 		gooi.newButton({
 			text = "",
