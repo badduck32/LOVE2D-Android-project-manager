@@ -11,7 +11,7 @@ function love.conf(t)
     -- Attach a console (boolean, Windows only)
     t.accelerometerjoystick = true      
 -- Enable the accelerometer on iOS and Android by exposing it as a Joystick (boolean)
-    t.externalstorage = false           
+    t.externalstorage = true     
 -- True to save files (and read from the save directory) in external storage on Android (boolean)
     t.gammacorrect = false              
 -- Enable gamma-correct rendering, when supported by the system (boolean)
