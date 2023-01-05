@@ -106,7 +106,7 @@ function loadEditor()
 			group = "editor"
 		}),
 		gooi.newButton({
-			text = "Build and run",
+			text = "Run game",
 			x = 10 + xoffs,
 			y = h - 50 + yoffs,
 			w = w - 20,

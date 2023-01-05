@@ -171,6 +171,7 @@ function gooi.newText(params)
     function f:deleteBack()
         if #self.letters > 0 and gooi.desktop then
             local letter = table.remove(self.letters, self.indexCursor)
+            print(letters)
             if letter then
                 self.indexCursor = self.indexCursor - 1
                 if self.dispHiddenChar > 0 then
