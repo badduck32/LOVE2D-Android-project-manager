@@ -28,6 +28,7 @@ if running then
 	location = split(datastring:sub(3,-1), "\n")[1]
 	--projectname = locationToProjectName(location)
 	urfs.mount(location, "game")
+	package.loaded["main"] = nil
 	love.filesystem.setRequirePath("game/?.lua;game/?/init.lua")
 	require("main")
 	
