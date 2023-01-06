@@ -44,7 +44,6 @@ end
 local press = love.keypressed
 
 function backKeySupport(k, code, isrepeat)
-	print("key")
 	if k == "escape" and playmode then
 		--back to editor
 		local datastring = "E\n"..love.filesystem.read("savedata.txt"):sub(3,-1)
@@ -56,6 +55,6 @@ function backKeySupport(k, code, isrepeat)
 end
 
 
-if playmode then
+if true then
 	love.keypressed = backKeySupport
 end
