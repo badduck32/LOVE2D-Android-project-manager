@@ -93,7 +93,10 @@ end
 function love.mousepressed(x, y, button)     gooi.pressed() end
 function love.mousereleased(x, y, button)    gooi.released() end
 function love.textinput(text)                gooi.textinput(text) end
-function love.keypressed(k, code, isrepeat)  gooi.keypressed(k, code) end
+function love.keypressed(k, code, isrepeat)
+	print("manager")
+	gooi.keypressed(k, code)
+end
 function love.keyreleased(k, code, isrepeat) gooi.keyreleased(k, code) end
 
 function love.update(dt)

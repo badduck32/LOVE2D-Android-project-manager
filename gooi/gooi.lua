@@ -717,7 +717,8 @@ function gooi.changeFont(font)-- Update font of every component:
   end
 end
 
-function gooi.keypressed(key, scancode, isrepeat)
+function gooi.keypressed(key, scancode)
+  print(key)
   if gooi.showingDialog then
     gooi.closeDialog()
   end

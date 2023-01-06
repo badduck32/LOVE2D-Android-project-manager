@@ -40,12 +40,22 @@ else
 	require("manager")
 end
 
-function love.keypressed(k, code, isrepeat)
+--support for the back key to return to the editor, but without "consuming" the love.keypressed callback
+local press = love.keypressed
+
+function backKeySupport(k, code, isrepeat)
+	print("key")
 	if k == "escape" and playmode then
 		--back to editor
-		local datastring = "M\n"..love.filesystem.read("savedata.txt"):sub(3,-1)
+		local datastring = "E\n"..love.filesystem.read("savedata.txt"):sub(3,-1)
 		print(datastring)
 		love.filesystem.write("savedata.txt", datastring)
 		love.event.quit("restart")
 	end
+	press(k, code, isrepeat)
+end
+
+
+if playmode then
+	love.keypressed = backKeySupport
 end

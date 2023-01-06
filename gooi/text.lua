@@ -169,6 +169,7 @@ function gooi.newText(params)
     end
 
     function f:deleteBack()
+        print("deleting")
         if #self.letters > 0 and gooi.desktop then
             local letter = table.remove(self.letters, self.indexCursor)
             print(letters)
@@ -202,6 +203,7 @@ function gooi.newText(params)
     end
 
     function f:typeCode(key, scancode, isrepeat)
+        print(key)
         if     key == gooi.l then   self:moveLeft()
         elseif key == gooi.r then   self:moveRight()
         elseif key == gooi.bs then  self:deleteBack()
