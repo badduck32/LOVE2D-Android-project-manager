@@ -1,7 +1,10 @@
-curgroup = "main-menu"
-components = {}
+local xo, yo, w, h = 0, 0, 0, 0
 
-function updateGUI()
+local curgroup = "main-menu"
+local components = {}
+
+function updateGUI(xo, yo, w, h)
+	xo = xo; yo = yo; w = w; h = h
 	if     curgroup == "main-menu"   then loadMainMenu()
 	elseif curgroup == "add-project" then loadAddProject()
 	elseif curgroup == "editor"      then loadEditor()
@@ -21,8 +24,8 @@ function loadMainMenu()
 	components = {
 		gooi.newLabel({
 			text = "Choose a project to load",
-			x = 0 + xoffs,
-			y = 25 + yoffs,
+			x = 0 + xo,
+			y = 25 + yo,
 			w = w,
 			h = 25,
 			group = "main-menu"
@@ -30,8 +33,8 @@ function loadMainMenu()
 		:center(),
 		gooi.newButton({
 			text = "Add new project",
-			x = 10 + xoffs,
-			y = h - 50 + yoffs,
+			x = 10 + xo,
+			y = h - 50 + yo,
 			w = w - 20,
 			h = 40,
 			group = "main-menu"
@@ -43,8 +46,8 @@ function loadMainMenu()
 	for i, v in ipairs(projectlist) do
 		table.insert(components, gooi.newButton({
 			text = locationToProjectName(v),
-			x = 10 + xoffs,
-			y = 25 + 60*i + yoffs,
+			x = 10 + xo,
+			y = 25 + 60*i + yo,
 			w = w - 20,
 			h = 50,
 			group = "main-menu"
@@ -62,16 +65,16 @@ function loadAddProject()
 	components = {
 		gooi.newText({
 			text = "",
-			x = 10 + xoffs,
-			y = h/2 - 40 + yoffs,
+			x = 10 + xo,
+			y = h/2 - 40 + yo,
 			w = w-20,
 			h = 40,
 			group = "add-project",
 		}),
 		gooi.newButton({
 			text = "Cancel",
-			x = 10 + xoffs,
-			y = h/2 + yoffs,
+			x = 10 + xo,
+			y = h/2 + yo,
 			w = w/2 - 10,
 			h = 40,
 			group = "add-project"
@@ -81,8 +84,8 @@ function loadAddProject()
 		end),
 		gooi.newButton({
 			text = "Confirm",
-			x = w/2 + xoffs,
-			y = h/2 + yoffs,
+			x = w/2 + xo,
+			y = h/2 + yo,
 			w = w/2 - 10,
 			h = 40,
 			group = "add-project"
@@ -99,16 +102,16 @@ function loadEditor()
 	components = {
 		gooi.newLabel({
 			text = curprojectname,
-			x = 10 + xoffs,
-			y = 10 + yoffs,
+			x = 10 + xo,
+			y = 10 + yo,
 			w = w - 60,
 			h = 50,
 			group = "editor"
 		}),
 		gooi.newButton({
 			text = "Run game",
-			x = 10 + xoffs,
-			y = h - 50 + yoffs,
+			x = 10 + xo,
+			y = h - 50 + yo,
 			w = w - 20,
 			h = 40,
 			group = "editor"
@@ -118,8 +121,8 @@ function loadEditor()
 		end),
 		gooi.newButton({
 			text = "",
-			x = w - 50 + xoffs,
-			y = 10 + yoffs,
+			x = w - 50 + xo,
+			y = 10 + yo,
 			w = 40,
 			h = 40,
 			icon = "assets/trashcan.png",

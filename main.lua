@@ -30,7 +30,7 @@ if datastring:sub(1, 1) == "P" then playmode = true end
 
 if playmode then
 	location = split(datastring:sub(3,-1), "\n")[1]
-	--projectname = locationToProjectName(location)
+	--maybe a better idea to mount it into the base directory, newImage is prob broken like this
 	urfs.mount(location, "game")
 	package.loaded["main"] = nil
 	love.filesystem.setRequirePath("game/?.lua;game/?/init.lua")

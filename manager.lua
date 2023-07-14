@@ -3,20 +3,20 @@ require("gooi")
 
 require("gui")
 
-xoffs = 0
-yoffs = 0
-w = 0
-h = 0
+local xoffs, yoffs, w, h = 0, 0, 0, 0
 
-projectlist = {}
-curprojectpath = ""
-curprojectname = ""
-
+local projectlist = {}
+local curprojectpath = ""
+local curprojectname = ""
 
 function love.load()
-	xoffs, yoffs, w, h = love.window.getSafeArea()
 	loadSavedData()
-	updateGUI()
+	love.resize()
+end
+
+function love.resize()
+	xoffs, yoffs, w, h = love.window.getSafeArea()
+	updateGUI(xoffs, yoffs, w, h)
 end
 
 function loadSavedData()
@@ -100,11 +100,6 @@ function love.keyreleased(k, code, isrepeat) gooi.keyreleased(k, code) end
 
 function love.update(dt)
 	gooi.update(dt)
-end
-
-function love.resize()
-	xoffs, yoffs, w, h = love.window.getSafeArea()
-	updateGUI()
 end
 
 function love.draw()
